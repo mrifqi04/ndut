@@ -1,0 +1,80 @@
+@extends('front.layout.master', ['title' => 'Pesanan Diterima'])
+
+@section('content')
+<section id="content">
+  <div class="container py-md-6 py-3">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <h1 class="text-center mt-3">Pesanan Diterima</h1>
+        <h3 class="text-danger p-3 my-3 text-center">HARAP CATAT INFORMASI BERIKUT</h3>
+        <div class="card">
+          <div class="card-body">
+            <div class="mb-3 text-center">
+              <h5 class="m-0 text-muted">Kode Transaksi</h5>
+              <h3 class="m-0">{{ $order->code }}</h3>
+            </div>
+            <div class="mb-3 text-center">
+              <h5 class="m-0 text-muted">Jumlah yang Harus Dibayar</h5>
+              <h3 class="m-0">{{ number_format($order->total_amount, 0, ',', '.') }}</h3>
+            </div>
+            <hr>
+            <div class="mb-3">
+              <p>Harap lakukan pembayaran ke salah satu rekening dibawah ini:</p>
+              <div class="list-group">
+                @foreach($bank_accounts as $bank_account)
+                <div class="list-group-item flex-column align-items-start">
+                  <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1">{{ $bank_account->bank_name }}</h5>
+                  </div>
+                  <p class="mb-1">{{ $bank_account->account_no }}</p>
+                  <small>Atas Nama: {{ $bank_account->account_owner }}</small>
+                </div>
+                @endforeach
+              </div>
+            </div>
+            <div>
+              <p>Jika sudah, harap melakukan konfirmasi pembayaran pada tautan dibawah ini:</p>
+              {{-- <div class="alert alert-secondary">
+                <a href="{{ route('front::payment-confirmation.form') }}">{{ route('front::payment-confirmation.form') }}</a>
+              </div> --}}
+              <button class="btn btn-primary btn-lg btn-block" id="pay-button">Bayar Sekarang</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+@stop
+
+@section('midtrans-script')
+<script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ config('services.midtrans.clientKey') }}"></script>
+    <script>
+        const payButton = document.querySelector('#pay-button');
+        payButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            var snapToken = '{{ $order->payment_url }}'
+            console.log(snapToken)
+            snap.pay(snapToken, {
+                // Optional
+                onSuccess: function(result) {
+                    /* You may add your own js here, this is just example */
+                    // document.getElementById('result-json').innerHTML += JSON.stringify(result, null, 2);
+                    console.log(result)
+                },
+                // Optional
+                onPending: function(result) {
+                    /* You may add your own js here, this is just example */
+                    // document.getElementById('result-json').innerHTML += JSON.stringify(result, null, 2);
+                    console.log(result)
+                },
+                // Optional
+                onError: function(result) {
+                    /* You may add your own js here, this is just example */
+                    // document.getElementById('result-json').innerHTML += JSON.stringify(result, null, 2);
+                    console.log(result)
+                }
+            });
+        });
+    </script>
+@endsection
