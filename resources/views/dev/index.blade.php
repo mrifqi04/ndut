@@ -122,7 +122,7 @@
                       <tr>
                         <td class="text-center">{{ $i + 1 }}</td>
                         <td>{{ $prediction->user->name }}</td>
-                        <td>{{ $prediction->product->title }}</td>
+                        <td>{{ $prediction->book->title }}</td>
                         <td class="text-center">{{ $prediction->rating }}</td>
                         <td class="text-center">
                           <a href="{{ url("dev/prediction?user_id={$prediction->user_id}&product_id={$prediction->product_id}") }}" class="btn btn-info btn-sm">
@@ -215,7 +215,6 @@
                 console.log('rating updated')
               })
               .fail(function() {
-                console.log(product_id)
                 alert('Terjadi kesalahan');
               });
             }

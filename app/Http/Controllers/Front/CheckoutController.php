@@ -2,16 +2,13 @@
 
 namespace App\Http\Controllers\Front;
 
-use Midtrans\Snap;
-use Midtrans\Config;
-use App\Models\Order;
-use Midtrans\Notification;
-use App\Models\BankAccount;
-use App\Models\OrderDetail;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Repositories\CartRepository;
-use App\Services\Midtrans\CreateSnapTokenService;
+use App\Models\Order;
+use App\Models\Product;
+use App\Models\OrderDetail;
+use App\Models\BankAccount;
 
 class CheckoutController extends Controller
 {
@@ -30,18 +27,18 @@ class CheckoutController extends Controller
         $this->validate($request, [
             'member_address_id' => 'required|exists:member_addresses,member_address_id'
         ]);
-
+        
         $user = auth()->user();
         $address = $user->member_addresses()->where('member_address_id', $request->get('member_address_id'))->first();
         if (!$address) {
             return back()->with('danger', "Alamat tidak terdaftar.");
         }
-
+        
         $items = $cart->all();
         if (!count($items)) {
             return back()->with('danger', 'Keranjang belanja anda kosong.');
         }
-
+        
         $order = new Order;
         $order->code = Order::generateCode();
         $order->member_user_id = $user->user_id;
@@ -62,25 +59,17 @@ class CheckoutController extends Controller
             $order_detail->product_id = $item['product']->product_id;
             $order_detail->price = $item['product']->price;
             $order_detail->qty = $item['qty'];
-
-            $gross_amount = $item['product']->price * $item['qty'] + $order->shipping_cost;
             $order_detail->save();
+
+            $getProductId = $item['product']->product_id;
+            $product = Product::find($getProductId);
+            $product->stock = 0;
+            $product->save();
         }
+    
+        $cart->clear();
 
-        $payment_url = $order->payment_url;
-        if (empty($payment_url)) {
-            // Jika snap token masih NULL, buat token snap dan simpan ke database
-
-            $midtrans = new CreateSnapTokenService($order);
-            $snapToken = $midtrans->getSnapToken($gross_amount);
-
-            $order->payment_url = $snapToken;
-            $order->save();
-
-            $cart->clear();
-
-            return redirect()->route('front::checkout.success', ['order_code' => $order->code]);
-        }
+        return redirect()->route('front::checkout.success', ['order_code' => $order->code]);
     }
 
     public function success(Request $request, $order_code)
@@ -97,64 +86,5 @@ class CheckoutController extends Controller
             'order' => $order,
             'bank_accounts' => $bank_accounts,
         ]);
-    }
-
-    public function callback()
-    {        
-        // Set konfigurasi Midtrans
-        Config::$serverKey = config('services.midtrans.serverKey');
-        Config::$isProduction = config('services.midtrans.isProduction');
-        Config::$isSanitized = config('services.midtrans.isSanitized');
-        Config::$is3ds = config('services.midtrans.is3ds');
-
-        // Buat instance Midtranas notification
-        $notification = new Notification;
-        
-        // Assign ke variabel
-        $status = $notification->transaction_status;
-        $type = $notification->payment_type;
-        $fraud = $notification->fraud_status;
-        $order_id = $notification->order_id;
-
-        // Cari transaksi berdasarkan id
-        $order = Order::where('code', $order_id)->first();
-
-        // Handle status notifikasi Midtrans
-        if ($status == 'capture')
-        {
-            if ($type == 'credit_card')
-            {
-                if($fraud == 'challenge')
-                {
-                    $order->status = 'PENDING';
-                }
-                else
-                {
-                    $order->status = 'SUCCESS';
-                }
-            }
-        }
-        else if ($status == 'settlement'){
-            $order->status = 'processing';
-        }
-        else if ($status == 'pending')
-        {
-            $order->status = 'PENDING';
-        }
-        else if ($status == 'deny')
-        {
-            $order->status = 'CANCELLED';
-        }
-        else if ($status == 'expire')
-        {
-            $order->status = 'CANCELLED';
-        }
-        else if ($status == 'cancel')
-        {
-            $order->status = 'CANCELLED';
-        }
-
-        // Simpan transaksi
-        $order->save();
     }
 }

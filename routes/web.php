@@ -16,10 +16,11 @@ use Illuminate\Support\Facades\Route;
 Route::group([
     'as' => 'front::',
     'namespace' => 'Front',
-], function () {
+], function() {
     Route::get('/', 'HomeController@index')->name('home');
 
     Route::get('/products', 'ProductController@index')->name('products.index');
+    Route::get('/about', 'ProductController@about')->name('products.about');
     Route::get('/products/{slug}', 'ProductController@show')->name('products.show');
 
     Route::get('/cart', 'CartController@items')->name('cart.items');
@@ -43,7 +44,7 @@ Route::group([
 
     Route::group([
         'middleware' => 'member',
-    ], function () {
+    ], function() {
         Route::get('/checkout', 'CheckoutController@form')->name('checkout.form');
         Route::post('/checkout', 'CheckoutController@submit')->name('checkout.submit');
         Route::get('/checkout/success/{order_code}', 'CheckoutController@success')->name('checkout.success');
@@ -74,14 +75,14 @@ Route::group([
     'prefix' => '/admin',
     'as' => 'admin::',
     'namespace' => 'Admin',
-], function () {
+], function() {
     Route::get('/login', 'LoginController@form')->name('login.form');
     Route::post('/login', 'LoginController@submit')->name('login.submit');
     Route::get('/logout', 'LoginController@logout')->name('logout');
 
     Route::group([
         'middleware' => 'admin',
-    ], function () {
+    ], function() {
         Route::get('/', 'DashboardController@index')->name('dashboard.index');
 
         // CRUD BUKU

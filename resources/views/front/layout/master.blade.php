@@ -58,6 +58,5 @@
     </script>
     <script src="{{ asset('edustage') }}/js/theme.js"></script>
     @show
-    @yield('midtrans-script')
   </body>
 </html>

@@ -56,6 +56,9 @@ $route_name = request()->route()->getName();
             <li class="nav-item {{ $route_name == 'front::products.index' ? 'active' : '' }}">
               <a class="nav-link" href="{{ route('front::products.index') }}">Products</a>
             </li>
+            <li class="nav-item {{ $route_name == 'front::products.about' ? 'active' : '' }}">
+              <a class="nav-link" href="{{ route('front::products.about') }}">About</a>
+            </li>
             {{-- <li class="nav-item submenu dropdown">
               <a
                 href="#"

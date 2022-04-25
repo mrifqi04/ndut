@@ -57,6 +57,8 @@
           <div class="form-group">
             <label>Jalan, No. Rumah</label>
             <textarea name="address" rows="2" class="form-control" required></textarea>
+            <small class="help-block" style="color: red;"> *Harap mengisi semua alamat</small>
+
           </div>
         </div>
         <div class="modal-footer">

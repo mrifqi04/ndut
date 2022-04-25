@@ -11,7 +11,10 @@ class HomeController extends Controller
     public function index(Request $request)
     {
         $popular_products = Product::inRandomOrder()->take(6)->get();
-        $newest_products = Product::orderBy('product_id', 'desc')->take(8)->get();
+        $newest_products = Product::orderBy('product_id', 'desc')
+        ->take(8)
+        ->where('stock', '!=', 0)
+        ->get();
 
         return view('front.pages.home', [
             'popular_products' => $popular_products,

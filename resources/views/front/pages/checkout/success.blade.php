@@ -34,10 +34,9 @@
             </div>
             <div>
               <p>Jika sudah, harap melakukan konfirmasi pembayaran pada tautan dibawah ini:</p>
-              {{-- <div class="alert alert-secondary">
+              <div class="alert alert-secondary">
                 <a href="{{ route('front::payment-confirmation.form') }}">{{ route('front::payment-confirmation.form') }}</a>
-              </div> --}}
-              <button class="btn btn-primary btn-lg btn-block" id="pay-button">Bayar Sekarang</button>
+              </div>
             </div>
           </div>
         </div>
@@ -46,35 +45,3 @@
   </div>
 </section>
 @stop
-
-@section('midtrans-script')
-<script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ config('services.midtrans.clientKey') }}"></script>
-    <script>
-        const payButton = document.querySelector('#pay-button');
-        payButton.addEventListener('click', function(e) {
-            e.preventDefault();
-            var snapToken = '{{ $order->payment_url }}'
-            console.log(snapToken)
-            snap.pay(snapToken, {
-                // Optional
-                onSuccess: function(result) {
-                    /* You may add your own js here, this is just example */
-                    // document.getElementById('result-json').innerHTML += JSON.stringify(result, null, 2);
-                    console.log(result)
-                },
-                // Optional
-                onPending: function(result) {
-                    /* You may add your own js here, this is just example */
-                    // document.getElementById('result-json').innerHTML += JSON.stringify(result, null, 2);
-                    console.log(result)
-                },
-                // Optional
-                onError: function(result) {
-                    /* You may add your own js here, this is just example */
-                    // document.getElementById('result-json').innerHTML += JSON.stringify(result, null, 2);
-                    console.log(result)
-                }
-            });
-        });
-    </script>
-@endsection

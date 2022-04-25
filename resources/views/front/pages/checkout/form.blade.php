@@ -70,6 +70,8 @@
                     <td width="200">Jalan, No. Rumah</td>
                     <td width="20" class="text-center">:</td>
                     <td class="address"></td>
+                    
+
                   </tr>
                 </tbody>
                 <tfoot>

@@ -38,9 +38,9 @@
                 <div class="input-group-prepend">
                   <span class="input-group-text">Buku</span>
                 </div>
-                <select name="product_id" class="form-control">
-                  @foreach($products as $product)
-                    <option {{ request('product_id') == $product->getKey() ? 'selected' : '' }} value="{{ $product->getKey() }}">{{ $product->title }}</option>
+                <select name="book_id" class="form-control">
+                  @foreach($books as $book)
+                    <option {{ request('book_id') == $book->getKey() ? 'selected' : '' }} value="{{ $book->getKey() }}">{{ $book->title }}</option>
                   @endforeach
                 </select>
               </div>
