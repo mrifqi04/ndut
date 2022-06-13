@@ -84,7 +84,12 @@ class HomeController extends Controller
 
     public function orderShow($id)
     {
-        $order=Order::find($id);
+        $order=Order::find($id)
+        ->with(array('cart' => function($query) {
+            $query->with('product');
+        }))        
+        ->first();
+        // dd($order);
         // return $order;
         return view('user.order.show')->with('order',$order);
     }

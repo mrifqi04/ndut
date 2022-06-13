@@ -53,8 +53,7 @@ class OrderController extends Controller
             'phone'=>'numeric|required',
             'post_code'=>'string|nullable',
             'email'=>'string|required'
-        ]);
-        // return $request->all();
+        ]);        
 
         if(empty(Cart::where('user_id',auth()->user()->id)->where('order_id',null)->first())){
             request()->session()->flash('error','Cart is Empty !');
@@ -89,7 +88,7 @@ class OrderController extends Controller
         // }
 
         $order=new Order();
-        $order_data=$request->all();
+        $order_data=$request->all();                
         $order_data['order_number']='ORD-'.strtoupper(Str::random(10));
         $order_data['user_id']=$request->user()->id;
         $order_data['shipping_id']=$request->shipping;

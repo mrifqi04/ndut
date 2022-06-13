@@ -1,5 +1,5 @@
 @extends('frontend.layouts.master')
-@section('title','SAN COMP || HOME PAGE')
+@section('title','Daily Use || HOME PAGE')
 @section('main-content')
 <!-- Slider Area -->
 {{-- <section class="hero-slider"> --}}

@@ -1,5 +1,5 @@
 @extends('backend.layouts.master')
-@section('title','SAN COMP || ADMIN PAGE')
+@section('title','Daily Use || ADMIN PAGE')
 @section('main-content')
 <div class="container-fluid">
     @include('backend.layouts.notification')

@@ -1,6 +1,6 @@
 @extends('frontend.layouts.master')
 
-@section('title','SAN COMP || Register Page')
+@section('title','Daily Use || Register Page')
 
 @section('main-content')
 	<!-- Breadcrumbs -->

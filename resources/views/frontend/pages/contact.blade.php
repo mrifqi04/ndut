@@ -1,5 +1,5 @@
 @extends('frontend.layouts.master')
-@section('title','SAN COMP || Contact Us')
+@section('title','Daily Use || Contact Us')
 
 @section('main-content')
 	<!-- Breadcrumbs -->

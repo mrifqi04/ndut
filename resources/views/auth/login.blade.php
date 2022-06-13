@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-  <title>SAN COMP || Login Page</title>
+  <title>Daily Use || Login Page</title>
   @include('backend.layouts.head')
 
 </head>

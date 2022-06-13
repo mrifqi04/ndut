@@ -20,8 +20,10 @@ class ProductController extends Controller
     {
         // dd('asd');
         $products=Product::getAllProduct();
-        // return $products;
-        return view('backend.product.index')->with('products',$products);
+        $brands = Brand::all();
+
+        // dd($products);
+        return view('backend.product.index', compact('products', 'brands'));
     }
 
     /**
